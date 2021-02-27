@@ -17,25 +17,35 @@ namespace IDJ_code
     public class CharacterController2D : MonoBehaviour
     {
         public string moveAxis = "Horizontal";
+
+        [SerializeField]
+        LayerMask platformsLayermask;
         [SerializeField]
         float moveSpeed = 10f;
         [SerializeField]
         float rollSpeed = 12f;
+        [SerializeField]
+        float jumpVelocity = 10f;
+        float lastYVelocity = 0;
 
         //bool isDashButtonDown;
         Rigidbody2D rbCharacter;
+        BoxCollider2D boxCollider2d;
+
 
         Vector2 moveDir;
         Vector2 rollDir;
         Vector3 lastMoveDir;
 
-        IDJ_enums.CharacterState state;
+        public IDJ_enums.CharacterState state;
 
 
         // Start is called before the first frame update
         void Awake()
         {
             rbCharacter = GetComponent<Rigidbody2D>();
+            boxCollider2d = GetComponent<BoxCollider2D>();
+
             state = IDJ_enums.CharacterState.Normal;
         }
 
@@ -54,9 +64,24 @@ namespace IDJ_code
                         moveDir.x = 0f;
                     }
 
+                    lastYVelocity = Mathf.Min(rbCharacter.velocity.y, 8f);
+
+                    //HandleMovement_fullMidAirControll();
+                    // handle jump
+                    
                     moveDir = moveDir.normalized;
                     
-                    if(moveDir.x != 0)
+                    if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) &&
+                        IsGrounded())
+                    {
+                        //var lastVelAux = rbCharacter.velocity;
+                        moveDir.y = (Vector2.up * jumpVelocity).y;
+                        lastYVelocity = Mathf.Min(jumpVelocity, 10f);
+
+                        //rbCharacter.velocity
+                    }
+                    
+                    if (moveDir.x != 0)
                     {
                         lastMoveDir = moveDir;
                     }
@@ -65,8 +90,9 @@ namespace IDJ_code
 
                     if (Input.GetKeyDown(KeyCode.S))
                     {
+                        lastMoveDir.y = 0;
                         rollDir = lastMoveDir;
-                        rollSpeed = 250f/5;
+                        rollSpeed = 250f / 5;
                         state = IDJ_enums.CharacterState.Rolling;
                         //characterBase.PlayRollAnimation(rollDir);
                     }
@@ -74,7 +100,7 @@ namespace IDJ_code
                     break;
                 case IDJ_enums.CharacterState.Rolling:
                     float rollSpeedDropMultiplier = 5f;
-                    rollSpeed -= rollSpeed * rollSpeedDropMultiplier * Time.deltaTime;
+                    rollSpeed -= Mathf.Min(rollSpeed * rollSpeedDropMultiplier * Time.deltaTime, 250f / 5);
 
                     float rollSpeedMinimum = 12f;
                     if (rollSpeed < rollSpeedMinimum)
@@ -83,7 +109,7 @@ namespace IDJ_code
                     }
                     break;
             }
-            
+
 
         }
 
@@ -92,7 +118,10 @@ namespace IDJ_code
             switch (state)
             {
                 case IDJ_enums.CharacterState.Normal:
-                    rbCharacter.velocity = moveDir * moveSpeed;
+                    var dirMovF = new Vector2(moveDir.x * moveSpeed, lastYVelocity);
+                    //dirMovF.y = Physics2D.gravity.y / 2; // watchout
+                    rbCharacter.velocity = dirMovF;
+
 
                     #region DASH_Mechanic
                     //if (isDashButtonDown)
@@ -117,6 +146,30 @@ namespace IDJ_code
                 case IDJ_enums.CharacterState.Rolling:
                     rbCharacter.velocity = rollDir * rollSpeed;
                     break;
+            }
+        }
+
+        public bool IsGrounded()
+        {
+            RaycastHit2D hitOutput = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f, Vector2.down, 1f, platformsLayermask);
+
+            //if (hitOutput != null)
+            //{
+            //    Debug.Log(hitOutput.collider.name + " ground !");
+
+            //}
+
+            return hitOutput.collider != null;
+        }
+        private void HandleMovement_fullMidAirControll()
+        {
+            if(Input.GetAxisRaw(moveAxis) != 0)
+            {
+                rbCharacter.velocity = new Vector2(moveSpeed, rbCharacter.velocity.y);
+            }
+            else
+            {
+                rbCharacter.velocity = new Vector2(0, rbCharacter.velocity.y);
             }
         }
     }

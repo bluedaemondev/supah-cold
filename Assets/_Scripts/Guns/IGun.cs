@@ -5,8 +5,9 @@ public interface IGun
 {
     void Shoot();
     IEnumerator Cooldown(float timeCd);
+    void StartCooldown(float timeCd);
     void ThrowSelf(Vector3 direction);
-    void Aim(Vector3 targetPosition);
+    //void Aim(Vector3 targetPosition);
     void PickUp();
 
 }
