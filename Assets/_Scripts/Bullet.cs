@@ -8,14 +8,15 @@ public class Bullet : MonoBehaviour
     public float speedTravel = 200;
     Rigidbody2D rbBullet;
 
+    public GameObject impactPrefab;
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //if (collision.gameObject.GetComponent<Health>() != null)
-        //{
-            
-        //    //HealthSystem hlth = collision.gameObject.GetComponent<Entity>().health;
-        //    //hlth.Damage(hlth.GetMaxLife());
-        //}
+        if(impactPrefab != null)
+        {
+            EffectFactory.instance.InstantiateEffectAt(impactPrefab, collision.GetContact(0).point, Quaternion.identity);
+        }
+        Destroy(this.gameObject);
     }
 
     public void LoadAttributesAndShoot(float bulletSpeed)
@@ -23,6 +24,6 @@ public class Bullet : MonoBehaviour
         rbBullet = GetComponent<Rigidbody2D>();
 
         this.speedTravel = bulletSpeed;
-        rbBullet.AddForce(transform.forward * bulletSpeed, ForceMode2D.Impulse);
+        rbBullet.AddForce(transform.right * bulletSpeed, ForceMode2D.Impulse);
     }
 }

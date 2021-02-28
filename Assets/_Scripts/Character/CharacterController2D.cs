@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace IDJ_enums
 
 namespace IDJ_code
 {
-    public class CharacterController2D : MonoBehaviour
+    public class CharacterController2D : EntityCharacter
     {
         public string moveAxis = "Horizontal";
 
@@ -28,11 +29,7 @@ namespace IDJ_code
         float jumpVelocity = 10f;
         float lastYVelocity = 0;
 
-        //bool isDashButtonDown;
-        Rigidbody2D rbCharacter;
-        BoxCollider2D boxCollider2d;
-
-
+        
         Vector2 moveDir;
         Vector2 rollDir;
         Vector3 lastMoveDir;
@@ -41,11 +38,9 @@ namespace IDJ_code
 
 
         // Start is called before the first frame update
-        void Awake()
+        public override void Awake()
         {
-            rbCharacter = GetComponent<Rigidbody2D>();
-            boxCollider2d = GetComponent<BoxCollider2D>();
-
+            base.Awake();
             state = IDJ_enums.CharacterState.Normal;
         }
 
@@ -55,32 +50,21 @@ namespace IDJ_code
             switch (state)
             {
                 case IDJ_enums.CharacterState.Normal:
-                    if (Input.GetAxisRaw(moveAxis) != 0)
-                    {
-                        moveDir.x = Input.GetAxisRaw(moveAxis);
-                    }
-                    else
-                    {
-                        moveDir.x = 0f;
-                    }
+                    moveDir.x = Input.GetAxisRaw(moveAxis);
+                    FlipSprite(moveDir.x);
 
                     lastYVelocity = Mathf.Min(rbCharacter.velocity.y, 8f);
 
-                    //HandleMovement_fullMidAirControll();
-                    // handle jump
-                    
                     moveDir = moveDir.normalized;
-                    
+
                     if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)) &&
                         IsGrounded())
                     {
-                        //var lastVelAux = rbCharacter.velocity;
                         moveDir.y = (Vector2.up * jumpVelocity).y;
                         lastYVelocity = Mathf.Min(jumpVelocity, 10f);
 
-                        //rbCharacter.velocity
                     }
-                    
+
                     if (moveDir.x != 0)
                     {
                         lastMoveDir = moveDir;
@@ -102,7 +86,7 @@ namespace IDJ_code
                     float rollSpeedDropMultiplier = 5f;
                     rollSpeed -= Mathf.Min(rollSpeed * rollSpeedDropMultiplier * Time.deltaTime, 250f / 5);
 
-                    float rollSpeedMinimum = 12f;
+                    float rollSpeedMinimum = 11f;
                     if (rollSpeed < rollSpeedMinimum)
                     {
                         state = IDJ_enums.CharacterState.Normal;
@@ -151,26 +135,10 @@ namespace IDJ_code
 
         public bool IsGrounded()
         {
-            RaycastHit2D hitOutput = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size,0f, Vector2.down, 1f, platformsLayermask);
+            RaycastHit2D hitOutput = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size, 0f, Vector2.down, 1f, platformsLayermask);
 
-            //if (hitOutput != null)
-            //{
-            //    Debug.Log(hitOutput.collider.name + " ground !");
-
-            //}
 
             return hitOutput.collider != null;
-        }
-        private void HandleMovement_fullMidAirControll()
-        {
-            if(Input.GetAxisRaw(moveAxis) != 0)
-            {
-                rbCharacter.velocity = new Vector2(moveSpeed, rbCharacter.velocity.y);
-            }
-            else
-            {
-                rbCharacter.velocity = new Vector2(0, rbCharacter.velocity.y);
-            }
         }
     }
 }

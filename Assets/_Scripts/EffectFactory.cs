@@ -21,6 +21,9 @@ public class EffectFactory : MonoBehaviour
             var pSys = spwn.GetComponent<ParticleSystem>();
 
             pSys.Play();
+            //pSys.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            Destroy(pSys.gameObject, pSys.main.duration);
+
         }
     }
 }

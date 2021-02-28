@@ -12,6 +12,10 @@ public class HandGunAim : MonoBehaviour
     void Update()
     {
         FollowMousePosition();
+        if (Input.GetMouseButton(0))
+        {
+            GetComponent<GunHolder>().OnShoot();
+        }
     }
     void FollowMousePosition()
     {

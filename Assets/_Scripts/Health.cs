@@ -13,9 +13,13 @@ public class Health : MonoBehaviour
     private int healthMax = 100;
     private int health;
 
+    public GameObject bloodPrefab;
+
     private void Start()
     {
         health = healthMax;
+
+        
     }
 
     public int GetMaxLife()
@@ -37,6 +41,8 @@ public class Health : MonoBehaviour
         }
         OnHealthChanged?.Invoke(this, EventArgs.Empty);
         OnDamaged?.Invoke(this, EventArgs.Empty);
+        
+        EffectFactory.instance.InstantiateEffectAt(bloodPrefab, transform.position, Quaternion.identity);
 
         if (health <= 0)
         {

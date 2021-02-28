@@ -10,7 +10,9 @@ public class Gun : MonoBehaviour, IGun
     public bool equiped = false;
     public bool canShoot = true;
     public GameObject prefabShoot;
-    public Gunpoint gunpoint; // guarda de donde salen los tiros
+    
+    
+    private Gunpoint gunpoint; // guarda de donde salen los tiros
 
     // Start is called before the first frame update
     void Start()
@@ -44,9 +46,10 @@ public class Gun : MonoBehaviour, IGun
         if (canShoot)
         {
             var bullet = Instantiate(prefabShoot, gunpoint.gunpointTransform.position, transform.rotation);
-            bullet.GetComponent<Rigidbody2D>().velocity = transform.parent.parent.GetComponent<Rigidbody2D>().velocity;
+            //bullet.GetComponent<Rigidbody2D>().velocity = transform.parent.parent.GetComponent<Rigidbody2D>().velocity;
             bullet.GetComponent<Bullet>().LoadAttributesAndShoot(bulletSpeed);
             StartCooldown(cooldownFireRate);
+            Debug.Log("Shooting " + transform.parent.parent.name);
         }
     }
 
