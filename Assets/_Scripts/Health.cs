@@ -19,7 +19,7 @@ public class Health : MonoBehaviour
     {
         health = healthMax;
 
-        
+
     }
 
     public int GetMaxLife()
@@ -41,12 +41,15 @@ public class Health : MonoBehaviour
         }
         OnHealthChanged?.Invoke(this, EventArgs.Empty);
         OnDamaged?.Invoke(this, EventArgs.Empty);
-        
+
         EffectFactory.instance.InstantiateEffectAt(bloodPrefab, transform.position, Quaternion.identity);
+        FindObjectOfType<CameraShake>().ShakeCameraNormal(8, 0.3f);
 
         if (health <= 0)
         {
             Die();
+            FindObjectOfType<CameraShake>().ShakeCameraNormal(2, 2f);
+
         }
     }
 

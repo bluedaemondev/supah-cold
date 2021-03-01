@@ -51,15 +51,16 @@ namespace IDJ_code
         bool IsInAttackRange()
         {
             bool atck = false;
-            var atckDirection = transform.position - FindObjectOfType<CharacterController2D>().transform.position ;
+            var atckDirection = (-transform.position + FindObjectOfType<CharacterController2D>().transform.position).normalized ;
 
-            Debug.DrawRay(transform.position, atckDirection, Color.green);
+            Debug.DrawRay(transform.position, atckDirection * rangeTriggerAttackState, Color.green);
 
-            var hitInfo = Physics2D.Raycast(transform.position, atckDirection, rangeTriggerAttackState, 1 << targetLayerMask);
+            var hitInfo = Physics2D.Raycast(transform.position, atckDirection, rangeTriggerAttackState, 1 << LayerMask.NameToLayer("Player")); //targetLayerMask
             // test layer
 
-            if (hitInfo.collider != null)
+            if (Vector2.Distance(hitInfo.point, transform.position) <= rangeTriggerAttackState)
             {
+                Debug.Log(hitInfo.distance);
                 atck = true;
             }
 

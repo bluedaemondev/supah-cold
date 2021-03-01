@@ -11,6 +11,8 @@ public class PlayerHandgunAim : HandGunAim
         if (Input.GetMouseButton(0))
         {
             GetComponent<GunHolder>().OnShoot();
+            FindObjectOfType<CameraShake>().ShakeCameraNormal(1f, 0.1f);
+
         }
     }
     public override void TargetAim()
