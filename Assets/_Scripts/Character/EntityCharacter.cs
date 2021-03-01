@@ -35,4 +35,11 @@ public class EntityCharacter : MonoBehaviour
         spRend.transform.localScale = scaleOriginal;
 
     }
+    /// <summary>
+    /// llamado por mensaje desde health
+    /// </summary>
+    public virtual void OnDie()
+    {
+        this.enabled = false;
+    }
 }

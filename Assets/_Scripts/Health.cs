@@ -53,6 +53,8 @@ public class Health : MonoBehaviour
     public void Die()
     {
         OnDead?.Invoke(this, EventArgs.Empty);
+        SendMessage("OnDie");
+
     }
 
     public bool IsDead()

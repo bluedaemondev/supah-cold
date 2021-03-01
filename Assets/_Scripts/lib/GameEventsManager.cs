@@ -7,6 +7,10 @@ public class GameEventsManager : MonoBehaviour
     public UnityEvent onWin;
     public UnityEvent onDefeat;
 
+    public GameObject pnlWin;
+    public GameObject pnlDefeat;
+
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -17,6 +21,31 @@ public class GameEventsManager : MonoBehaviour
 
         onWin = new UnityEvent();
         onDefeat = new UnityEvent();
+
+        onWin.AddListener(ActPanelWin);
+        onDefeat.AddListener(ActPanelDef);
+
     }
 
+    void ActPanelWin()
+    {
+        pnlWin.SetActive(true);
+    }
+    void ActPanelDef()
+    {
+        pnlDefeat.SetActive(true);
+    }
+
+    public void BtnReloadActiveScene()
+    {
+        SceneManagerMulti.instance.ReLoadLastScene();
+    }
+    public void BtnLoadMenuScene()
+    {
+        SceneManagerMulti.instance.LoadScene(0);
+    }
+    public void BtnLoadNextScene()
+    {
+        SceneManagerMulti.instance.LoadNextScene();
+    }
 }

@@ -6,12 +6,12 @@ using UnityEngine;
 namespace IDJ_enums
 {
     public enum EnemyState
-    { 
+    {
         Idle,
         Attacking
     }
 }
-    namespace IDJ_code
+namespace IDJ_code
 {
     public class Enemy : EntityCharacter
     {
@@ -29,7 +29,7 @@ namespace IDJ_enums
 
         void Update()
         {
-            if(IsInAttackRange())
+            if (IsInAttackRange())
             {
                 SetAttackingState();
                 Attack();
@@ -43,17 +43,22 @@ namespace IDJ_enums
 
         private void Attack()
         {
+            Debug.Log("attacking " + this.transform.name);
             GetComponentInChildren<GunHolder>().OnShoot();
+
         }
 
         bool IsInAttackRange()
         {
             bool atck = false;
-            var atckDirection = transform.position - FindObjectOfType<CharacterController2D>().transform.position;
-            var hitInfo = Physics2D.Raycast(transform.position, atckDirection , rangeTriggerAttackState, 1 << targetLayerMask);
+            var atckDirection = transform.position - FindObjectOfType<CharacterController2D>().transform.position ;
+
+            Debug.DrawRay(transform.position, atckDirection, Color.green);
+
+            var hitInfo = Physics2D.Raycast(transform.position, atckDirection, rangeTriggerAttackState, 1 << targetLayerMask);
             // test layer
 
-            if(hitInfo.collider != null)
+            if (hitInfo.collider != null)
             {
                 atck = true;
             }

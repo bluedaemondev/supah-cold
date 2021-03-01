@@ -52,13 +52,14 @@ public class MainMenuUIScript : MonoBehaviour
     }
     public void PlayScene(string nameScene)
     {
-        SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("MainMenu"));
-        SceneManager.LoadScene(nameScene);
+        //SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("MainMenu"));
+        //SceneManager.LoadScene(nameScene, LoadSceneMode.Additive);
+        SceneManagerMulti.instance.LoadNextScene();
     }
     public void PlayNextScene()
     {
         SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("MainMenu"));
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1, LoadSceneMode.Additive);
     }
     public void ExitGame()
     {

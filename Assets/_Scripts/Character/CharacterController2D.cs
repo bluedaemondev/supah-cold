@@ -132,13 +132,20 @@ namespace IDJ_code
                     break;
             }
         }
-
+        
         public bool IsGrounded()
         {
             RaycastHit2D hitOutput = Physics2D.BoxCast(boxCollider2d.bounds.center, boxCollider2d.bounds.size, 0f, Vector2.down, 1f, platformsLayermask);
 
 
             return hitOutput.collider != null;
+        }
+
+        public override void OnDie()
+        {
+            GameEventsManager.instance.onDefeat.Invoke();
+            base.OnDie();
+
         }
     }
 }

@@ -9,22 +9,14 @@ using UnityEngine;
 
 public class HandGunAim : MonoBehaviour
 {
-    void Update()
+    public virtual void Update()
     {
-        FollowMousePosition();
-        if (Input.GetMouseButton(0))
-        {
-            GetComponent<GunHolder>().OnShoot();
-        }
+        TargetAim();
+        
     }
-    void FollowMousePosition()
+    public virtual void TargetAim()
     {
-        var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 0;
-
-        var aimDirection = (mousePos - transform.position ).normalized;
-        float angleRotation = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
-        transform.eulerAngles = new Vector3(0, 0, angleRotation);
+        //Debug.Log("Aiming");
     }
 
     

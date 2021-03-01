@@ -5,8 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagerMulti : MonoBehaviour
 {
+    public static SceneManagerMulti instance { get; private set; }
+
     public string staticFolderName = "Static";
     public int staticSceneCountInBuildSettings = 3;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -29,10 +36,40 @@ public class SceneManagerMulti : MonoBehaviour
             //{
             SceneManager.LoadScene(i, LoadSceneMode.Additive);
 
+
             //}
             // or depending on your usecase
             //SceneManager.LoadSceneAsync(i, LoadSceneMode.Additive);
         }
+        StartCoroutine(SetLastSceneAsActive());
+    }
 
+    public void LoadScene(int buildIndex = 0)
+    {
+        SceneManager.LoadScene(buildIndex);
+    }
+    public void LoadNextScene(string buildIndex = "")
+    {
+        Scene scLast = SceneManager.GetActiveScene();
+        SceneManager.UnloadSceneAsync(scLast.buildIndex);
+        SceneManager.LoadScene(scLast.buildIndex + 1, LoadSceneMode.Additive);
+        StartCoroutine(SetLastSceneAsActive());
+    }
+
+    public void ReLoadLastScene()
+    {
+        Scene scLast = SceneManager.GetActiveScene();
+
+        SceneManager.UnloadSceneAsync(scLast.buildIndex);
+        SceneManager.LoadScene(scLast.buildIndex, LoadSceneMode.Additive);
+        StartCoroutine(SetLastSceneAsActive());
+
+    }
+
+    IEnumerator SetLastSceneAsActive()
+    {
+        yield return new WaitForSeconds(1);
+        SceneManager.SetActiveScene(SceneManager.GetSceneAt(SceneManager.sceneCount - 1));
+        Debug.Log(SceneManager.GetSceneAt(SceneManager.sceneCount - 1).name);
     }
 }
