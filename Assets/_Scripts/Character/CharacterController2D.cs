@@ -34,6 +34,8 @@ namespace IDJ_code
         Vector2 rollDir;
         Vector3 lastMoveDir;
 
+        private Animator animator;
+
         public IDJ_enums.CharacterState state;
 
 
@@ -42,6 +44,7 @@ namespace IDJ_code
         {
             base.Awake();
             state = IDJ_enums.CharacterState.Normal;
+            animator = GetComponent<Animator>();
         }
 
         // Update is called once per frame
@@ -70,7 +73,9 @@ namespace IDJ_code
                         lastMoveDir = moveDir;
                     }
 
-                    // characterBase.PlayMoveAnim(moveDir);
+                    animator.SetBool("isMoving", moveDir.x != 0);
+                    animator.SetBool("rolling", false);
+
 
                     if (Input.GetKeyDown(KeyCode.S))
                     {
@@ -83,6 +88,9 @@ namespace IDJ_code
 
                     break;
                 case IDJ_enums.CharacterState.Rolling:
+                    animator.SetBool("isMoving",false);
+                    animator.SetBool("rolling", true);
+
                     float rollSpeedDropMultiplier = 5f;
                     rollSpeed -= Mathf.Min(rollSpeed * rollSpeedDropMultiplier * Time.deltaTime, 250f / 5);
 

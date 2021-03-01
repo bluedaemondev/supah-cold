@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speedTravel = 200;
+    public Vector2 speedTravel;
     Rigidbody2D rbBullet;
 
     public GameObject impactPrefab;
@@ -19,11 +19,12 @@ public class Bullet : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    public void LoadAttributesAndShoot(float bulletSpeed)
+    public void LoadAttributesAndShoot(Vector2 bulletSpeed)
     {
         rbBullet = GetComponent<Rigidbody2D>();
 
         this.speedTravel = bulletSpeed;
-        rbBullet.AddForce(transform.right * bulletSpeed, ForceMode2D.Impulse);
+        var rforc = Vector2.one * speedTravel;
+        rbBullet.AddForce(rforc, ForceMode2D.Impulse);
     }
 }

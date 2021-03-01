@@ -6,7 +6,7 @@ public class PlayerHandgunAim : HandGunAim
 {
     public override void Update()
     {
-        base.Update();
+        //base.Update();
 
         if (Input.GetMouseButton(0))
         {
@@ -14,6 +14,10 @@ public class PlayerHandgunAim : HandGunAim
             FindObjectOfType<CameraShake>().ShakeCameraNormal(1f, 0.1f);
 
         }
+    }
+    public void LateUpdate()
+    {
+        base.Update();
     }
     public override void TargetAim()
     {

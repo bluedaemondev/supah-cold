@@ -32,7 +32,7 @@ public class EntityCharacter : MonoBehaviour
             scaleOriginal.x = Mathf.Abs(scaleOriginal.x);
         }
 
-        spRend.transform.localScale = scaleOriginal;
+        transform.localScale = scaleOriginal;
 
     }
     /// <summary>

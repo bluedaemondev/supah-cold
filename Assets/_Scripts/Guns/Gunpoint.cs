@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Gunpoint : MonoBehaviour
 {
+    [HideInInspector]
     public Transform gunpointTransform;
 
-    private void Start()
+    public void Start()
     {
         this.gunpointTransform = transform;
     }

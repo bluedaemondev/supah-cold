@@ -7,32 +7,33 @@ public class Gun : MonoBehaviour, IGun
     public float cooldownFireRate = 0.4f;
     public float bulletSpeed = 200f;
 
+    public bool playerHeld = false;
     public bool equiped = false;
     public bool canShoot = true;
     public GameObject prefabShoot;
-    
-    
-    private Gunpoint gunpoint; // guarda de donde salen los tiros
+
+
+    protected Gunpoint gunpoint; // guarda de donde salen los tiros
 
     // Start is called before the first frame update
-    void Start()
+    public virtual void Start()
     {
         gunpoint = GetComponentInChildren<Gunpoint>();
     }
 
-    public IEnumerator Cooldown(float timeCd)
+    public virtual IEnumerator Cooldown(float timeCd)
     {
         canShoot = false;
         yield return new WaitForSecondsRealtime(timeCd); //Realtime
         canShoot = true;
     }
 
-    public void StartCooldown(float timeCd)
+    public virtual void StartCooldown(float timeCd)
     {
         StartCoroutine(Cooldown(timeCd));
     }
 
-    public void PickUp()
+    public virtual void PickUp()
     {
         if (!equiped)
         {
@@ -41,19 +42,19 @@ public class Gun : MonoBehaviour, IGun
         }
     }
 
-    public void Shoot()
+    public virtual void Shoot()
     {
         if (canShoot)
         {
             var bullet = Instantiate(prefabShoot, gunpoint.gunpointTransform.position, transform.rotation);
             //bullet.GetComponent<Rigidbody2D>().velocity = transform.parent.parent.GetComponent<Rigidbody2D>().velocity;
-            bullet.GetComponent<Bullet>().LoadAttributesAndShoot(bulletSpeed);
+            bullet.GetComponent<Bullet>().LoadAttributesAndShoot((gunpoint.transform.position - transform.position).normalized * bulletSpeed);
             StartCooldown(cooldownFireRate);
             Debug.Log("Shooting " + transform.parent.parent.name);
         }
     }
 
-    public void ThrowSelf(Vector3 direction)
+    public virtual void ThrowSelf(Vector3 direction)
     {
         if (equiped)
         {
