@@ -54,7 +54,7 @@ public class MainMenuUIScript : MonoBehaviour
     {
         //SceneManager.UnloadSceneAsync(SceneManager.GetSceneByName("MainMenu"));
         //SceneManager.LoadScene(nameScene, LoadSceneMode.Additive);
-        SceneManagerMulti.instance.LoadNextScene();
+        SceneManagerMulti.instance.LoadScene(nameScene);
     }
     public void PlayNextScene()
     {

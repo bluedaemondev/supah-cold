@@ -47,7 +47,11 @@ namespace IDJ_code
             GetComponentInChildren<GunHolder>().OnShoot();
 
         }
-
+        public override void OnDie()
+        {
+            base.OnDie();
+            Destroy(this.gameObject);
+        }
         bool IsInAttackRange()
         {
             bool atck = false;

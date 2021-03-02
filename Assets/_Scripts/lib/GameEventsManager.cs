@@ -46,6 +46,6 @@ public class GameEventsManager : MonoBehaviour
     }
     public void BtnLoadNextScene()
     {
-        SceneManagerMulti.instance.LoadNextScene();
+        SceneManagerMulti.instance.LoadScene("");
     }
 }

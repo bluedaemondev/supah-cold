@@ -48,11 +48,15 @@ public class SceneManagerMulti : MonoBehaviour
     {
         SceneManager.LoadScene(buildIndex);
     }
-    public void LoadNextScene(string buildIndex = "")
+    public void LoadScene(string buildIndex)
     {
+
         Scene scLast = SceneManager.GetActiveScene();
         SceneManager.UnloadSceneAsync(scLast.buildIndex);
-        SceneManager.LoadScene(scLast.buildIndex + 1, LoadSceneMode.Additive);
+        if (buildIndex != "")
+            SceneManager.LoadScene(buildIndex, LoadSceneMode.Additive);
+        else
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1, LoadSceneMode.Additive);
         StartCoroutine(SetLastSceneAsActive());
     }
 
